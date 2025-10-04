@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        'playfair': ['Playfair Display', 'serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -57,6 +60,17 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        coffee: {
+          dark: "hsl(var(--coffee-dark))",
+          medium: "hsl(var(--coffee-medium))",
+          light: "hsl(var(--coffee-light))",
+        },
+        cream: "hsl(var(--cream))",
+        "warm-beige": "hsl(var(--warm-beige))",
+      },
+      backgroundImage: {
+        'coffee-gradient': 'linear-gradient(135deg, hsl(var(--coffee-medium)), hsl(var(--coffee-light)))',
+        'warm-gradient': 'linear-gradient(180deg, hsl(var(--cream)), hsl(var(--warm-beige)))',
       },
       borderRadius: {
         lg: "var(--radius)",
