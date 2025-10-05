@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coffee-shop
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: coffee-shop
+    template:
+      metadata:
+        labels:
+          app: coffee-shop
+      spec:
+        container:
+          - name: coffee-shop-container
+            image: coffee-shop:latest
+          - ports:
+            - containerPort: 8080
+
+  
