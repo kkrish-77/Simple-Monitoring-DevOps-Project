@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: coffee-shop-container
-          image: coffee-shop:latest
+          image: kkrish7/coffee-shop:latest
           ports:
             - containerPort: 8080
