@@ -1,73 +1,125 @@
-# Welcome to your Lovable project
+# Golden Roast Coffee Website Monitoring with Prometheus & Grafana
 
-## Project info
+## 📊 Overview
 
-**URL**: https://lovable.dev/projects/f37977c4-e4e7-4975-a4d2-0043fb1fc352
+This project provides monitoring and observability for a Node.js app using **Prometheus** for metrics collection and **Grafana** for visualization.
 
-## How can I edit this code?
+- Node.js app exposes metrics via `/metrics` endpoint
+- Prometheus scrapes the app and any exporters (Node Exporter, etc.)
+- Grafana is used to build dashboards from Prometheus data
 
-There are several ways of editing your application.
+***
 
-**Use Lovable**
+## 🛠️ Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f37977c4-e4e7-4975-a4d2-0043fb1fc352) and start prompting.
+- Node.js (for app)
+- Docker & Docker Compose (recommended)
+- Prometheus
+- Grafana
 
-Changes made via Lovable will be committed automatically to this repo.
+***
 
-**Use your preferred IDE**
+## 🚀 Installation & Setup
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 1. Clone the Repo
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+git clone https://github.com/yourusername/golden-roast-cafe.git
+cd golden-roast-cafe
 ```
 
-**Edit a file directly in GitHub**
+### 2. Start Services (Recommended: Docker Compose)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Update any config paths/filenames if you renamed resources.
 
-**Use GitHub Codespaces**
+```bash
+docker-compose up -d
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- Node.js API: [http://localhost:8080](http://localhost:8080)
+- Metrics endpoint: [http://localhost:8080/metrics](http://localhost:8080/metrics)
+- Prometheus: [http://localhost:9090](http://localhost:9090)
+- Grafana: [http://localhost:3000](http://localhost:3000)
 
-## What technologies are used for this project?
+***
 
-This project is built with:
+## 🔧 Manual Installation
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### 1. **Prometheus**
 
-## How can I deploy this project?
+- [Download Prometheus](https://prometheus.io/download/)
+- Edit `prometheus.yml` to configure scrape targets:
+  ```yaml
+  scrape_configs:
+    - job_name: 'node'
+      static_configs:
+        - targets: ['localhost:8080'] 
 
-Simply open [Lovable](https://lovable.dev/projects/f37977c4-e4e7-4975-a4d2-0043fb1fc352) and click on Share -> Publish.
+  ```
 
-## Can I connect a custom domain to my Lovable project?
+### 2. **Node Exporter (Optional - for system metrics)**
 
-Yes, you can!
+- [Download Node Exporter](https://prometheus.io/download/#node_exporter)
+- Start with `./node_exporter`
+- Add to Prometheus:
+  ```yaml
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+  ```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### 3. **Grafana**
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+#### On Ubuntu/Debian:
+```bash
+sudo apt update
+sudo mkdir -p /etc/apt/keyrings
+wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee /etc/apt/sources.list.d/grafana.list
+sudo apt update
+sudo apt install grafana
+sudo systemctl start grafana-server
+sudo systemctl enable grafana-server
+```
+Login at [http://localhost:3000](http://localhost:3000) (`admin`/`admin`), change the password.
+
+- Add Prometheus as a data source (URL: `http://localhost:9090`)
+
+***
+
+## 📈 Example Prometheus Queries for Grafana Panels
+
+Add these queries in your Grafana dashboard panels:
+
+- **Target Health:**  
+  `up`
+
+- **CPU Usage Rate:**  
+  `rate(node_cpu_seconds_total{mode!="idle"}[5m])`
+
+- **Memory Usage (MB):**  
+  `node_memory_Active_bytes / 1024 / 1024`
+
+- **Pod CPU Usage (Kubernetes):**  
+  `sum(rate(container_cpu_usage_seconds_total[5m])) by (pod)`
+
+- **HTTP Request Rate:**  
+  `rate(http_requests_total[5m])`
+
+***
+
+## 🎯 Usage
+
+1. Access Grafana UI, create panels using above queries.
+2. Visualize your application/server health and traffic.
+3. Use pre-made dashboards from community or create alerts.
+
+***
+
+## 📚 Resources
+
+- [Prometheus Documentation](https://prometheus.io/docs/)
+- [Grafana Documentation](https://grafana.com/docs/)
+- [PromQL Cheat Sheet](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+
+***
