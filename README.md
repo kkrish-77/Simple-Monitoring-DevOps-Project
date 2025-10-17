@@ -1,5 +1,7 @@
 # Golden Roast Coffee Website Monitoring with Prometheus & Grafana
 
+<img width="1024" height="1536" alt="Image" src="https://github.com/user-attachments/assets/b1341f5f-54c4-4aab-9401-74684cc0dd85" />
+
 ## 📊 Overview
 
 This project provides monitoring and observability for a Node.js app using **Prometheus** for metrics collection and **Grafana** for visualization.
